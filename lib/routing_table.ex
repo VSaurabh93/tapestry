@@ -1,7 +1,7 @@
 defmodule Tapestry.RoutingTable do
 
   @base 16
-  @levels 3
+  @levels 7
   @digits ["0","1","2","3","4","5","6","7","8","9","A", "B", "C", "D", "E", "F"]
 
   def create_table(current_node_id, peer_node_ids) do
@@ -97,6 +97,21 @@ defmodule Tapestry.RoutingTable do
           update_table(table_i_j, row_key, col_key, selected_node)
       end)
     end)
+  end
+
+  def query_closest_node_in_table(query_node, table, table_owner_node) do
+    match_level = get_prefix_match(table_owner_node, query_node) |> elem(0)
+    columns = table[match_level]
+    col_key = String.at(query_node, match_level)
+
+    value = table[match_level][col_key]
+    if value == nil do
+        IO.inspect("Bug in routing table")
+        column_nodes = Map.values(columns)
+        get_closest_node(query_node, column_nodes)
+    else
+        value
+    end
   end
 
 end
