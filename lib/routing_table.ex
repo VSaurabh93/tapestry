@@ -30,31 +30,31 @@ defmodule Tapestry.RoutingTable do
   end
 
 
-  defp create_empty_table() do
+  def create_empty_table() do
     _table = for level <- 0..(@levels), into: %{}, do: {level, (for digit <- @digits, into: %{}, do: {digit, nil})}
   end
 
 
-  defp match_nth_digit(current_node_id, other_node_id, n) do
+  def match_nth_digit(current_node_id, other_node_id, n) do
     if String.at(current_node_id, n) == String.at(other_node_id, n), do: true, else: false
   end
 
 
-  defp get_prefix_match(_current_node_id, other_node_id, @levels), do: {@levels, other_node_id}
-  defp get_prefix_match(current_node_id, other_node_id, n) do
+  def get_prefix_match(_current_node_id, other_node_id, @levels), do: {@levels, other_node_id}
+  def get_prefix_match(current_node_id, other_node_id, n) do
     if match_nth_digit(current_node_id, other_node_id, n) do
       get_prefix_match(current_node_id, other_node_id, n + 1)
   else
     {n, other_node_id}
     end
   end
-  defp get_prefix_match(current_node_id, other_node_id) do
+  def get_prefix_match(current_node_id, other_node_id) do
     get_prefix_match(current_node_id, other_node_id, 0)
  end
 
 
 
-  defp generate_prefix_matches(current_node_id, peer_node_ids) do
+  def generate_prefix_matches(current_node_id, peer_node_ids) do
     stored_prefix_matches = for n <- 0..@levels, into: %{}, do: {n, []}
     add_to_stored_matches = fn {n, node_id}, matches -> Map.put(matches, n, matches[n] ++ [node_id]) end
 
