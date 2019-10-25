@@ -20,7 +20,7 @@ defmodule Tapestry.RoutingTable do
     #debug end
 
     IO.puts("current node: #{current_node_id}")
-    IO.puts("peer nodes:")
+    IO.puts("peer nodes prefix matches:")
     #IO.inspect(peer_node_ids)
 
     table = create_empty_table()
