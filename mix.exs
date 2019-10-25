@@ -14,7 +14,9 @@ defmodule Tapestry.MixProject do
   # Run "mix help compile.app" to learn about applications.
   def application do
     [
-      extra_applications: [:logger]
+      Application.start(Tapestry.MainApp),
+      extra_applications: [:logger],
+      mod: {Tapestry.MainApp, []}
     ]
   end
 

@@ -4,10 +4,10 @@ defmodule Tapestry.RoutingTable do
   @levels 3
   @digits ["0","1","2","3","4","5","6","7","8","9","A", "B", "C", "D", "E", "F"]
 
-  def create_table() do
-    # current_node_id, peer_node_ids
-    node_ids = Tapestry.Utils.generate_node_guids(1000)
-    [current_node_id | peer_node_ids] = node_ids
+  def create_table(current_node_id, peer_node_ids) do
+
+    #node_ids = Tapestry.Utils.generate_node_guids(1000)
+    #[current_node_id | peer_node_ids] = node_ids
 
     #debug
     # current_node_id = "42AD"
@@ -40,7 +40,7 @@ defmodule Tapestry.RoutingTable do
   end
 
 
-  defp get_prefix_match(current_node_id, other_node_id, @levels), do: {@levels, other_node_id}
+  defp get_prefix_match(_current_node_id, other_node_id, @levels), do: {@levels, other_node_id}
   defp get_prefix_match(current_node_id, other_node_id, n) do
     if match_nth_digit(current_node_id, other_node_id, n) do
       get_prefix_match(current_node_id, other_node_id, n + 1)
