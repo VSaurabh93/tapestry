@@ -38,4 +38,8 @@ def handle_cast({:getHops, {source_node, dest_node, hop_count}}, {current_node_i
   end
 end
 
+def handle_cast({:joinNode, new_node}, {current_node_id, routing_table}) do
+  routing_table = Joiner.start(current_node_id,routing_table,new_node)
+  {:noreply, {current_node_id, routing_table}}
+end
 end

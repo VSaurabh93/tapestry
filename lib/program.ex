@@ -2,7 +2,10 @@ defmodule Tapestry.Program do
 
   def start(num_nodes, num_requests) do
     node_ids = Tapestry.Utils.generate_node_guids(num_nodes)
-    create_nodes(node_ids)
+
+    [first_node | remaining_nodes] = node_ids
+    create_nodes(remaining_nodes)
+    join_node(remaining_nodes, first_node)
 
     Tapestry.Counter.start_link(num_nodes*num_requests)
     #hops_task = Task.async(fn -> update_global_max_hops(0, 0, num_nodes*num_requests ) end)
@@ -18,6 +21,15 @@ defmodule Tapestry.Program do
   def create_nodes(node_ids) do
     for current_node_id <- node_ids ,do:
       Tapestry.Node.start_link(current_node_id, node_ids)
+
+  end
+
+  def join_node(node_ids, joining_node)do
+    IO.inspect(joining_node)
+    Tapestry.Node.start_link(joining_node, node_ids)
+    for current_node_id <- node_ids ,do:
+    GenServer.cast(String.to_atom(current_node_id), {:joinNode, joining_node})
+
   end
 
   def get_max_hops(num_requests, all_node_ids) do
