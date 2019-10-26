@@ -13,8 +13,8 @@ defmodule Tapestry.Program do
 
   def get_max_hops(_num_nodes, _num_requests, all_node_ids) do
     source_node = Enum.at(all_node_ids, 0)
-    dest_node = Enum.at(all_node_ids, 1)
-
-    Tapestry.Node.get_hops(source_node, dest_node, 5)
+    dest_node = Enum.at(all_node_ids, 999)
+    IO.inspect(["source ", source_node, " dest", dest_node])
+    Tapestry.Node.get_hops(source_node, dest_node, 0)
   end
 end

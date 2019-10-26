@@ -19,12 +19,12 @@ defmodule Tapestry.RoutingTable do
 
     #debug end
 
-    IO.puts("current node: #{current_node_id}")
-    IO.puts("peer nodes prefix matches:")
+    #IO.puts("current node: #{current_node_id}")
+    #IO.puts("peer nodes prefix matches:")
     #IO.inspect(peer_node_ids)
 
     table = create_empty_table()
-    prefix_matches = generate_prefix_matches(current_node_id, peer_node_ids) |> IO.inspect
+    prefix_matches = generate_prefix_matches(current_node_id, peer_node_ids) #|> IO.inspect
     populate_table(table, current_node_id, prefix_matches)
 
   end
@@ -105,11 +105,16 @@ defmodule Tapestry.RoutingTable do
     col_key = String.at(query_node, match_level)
 
     value = table[match_level][col_key]
-    if value == nil do
+    cond  do
+      value == query_node ->
+        #IO.inspect("Match level " <> Integer.to_string(match_level))
+        value
+      value == nil ->
         IO.inspect("Bug in routing table")
-        column_nodes = Map.values(columns)
-        get_closest_node(query_node, column_nodes)
-    else
+      true ->
+        #IO.inspect([query_node, value])
+        #column_nodes = Map.values(columns)
+        #get_closest_node(query_node, column_nodes)
         value
     end
   end

@@ -9,9 +9,9 @@ defmodule Tapestry.Node do
 end
 
 def init({current_node_id, routing_table}) do
-  IO.inspect("Started Worker Node: " <> current_node_id)
-  IO.puts("Routing Table:")
-  IO.inspect(routing_table)
+  #IO.inspect("Started Worker Node: " <> current_node_id)
+  #IO.puts("Routing Table:")
+  #IO.inspect(routing_table)
   {:ok, {current_node_id, routing_table}}
 end
 
@@ -21,14 +21,16 @@ def get_hops(source_node, dest_node, hop_count) do
 end
 
 def handle_cast({:getHops, {source_node, dest_node, hop_count}}, {current_node_id, routing_table}) do
-  IO.inspect("Enter Handle cast")
   closest_node = Tapestry.RoutingTable.query_closest_node_in_table(dest_node, routing_table, current_node_id)
   if closest_node == dest_node do
     # update some global service about hops
-    IO.puts(source_node <> " took " <> Integer.to_string(hop_count) <> " hops ")
+    IO.puts("reached " <> dest_node <> " in " <> Integer.to_string(hop_count) <> " hops ")
     {:noreply, {current_node_id, routing_table}}
   else
-    get_hops(current_node_id, dest_node , hop_count + 1)
+    #IO.inspect(source_node <> Integer.to_string(hop_count) <> " hops ")
+    IO.inspect(["Hopping from ",current_node_id, " to ", closest_node,
+              " current hops: ", Integer.to_string(hop_count + 1)])
+    get_hops(closest_node, dest_node , hop_count + 1)
     {:noreply, {current_node_id, routing_table}}
   end
 end
