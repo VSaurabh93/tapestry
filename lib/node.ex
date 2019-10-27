@@ -25,7 +25,7 @@ def handle_cast({:getHops, {source_node, dest_node, hop_count}}, {current_node_i
   closest_node = Tapestry.RoutingTable.query_closest_node_in_table(dest_node, routing_table, current_node_id)
   if closest_node == dest_node do
     # update some global service about hops
-    IO.puts("reached " <> dest_node <> " in " <> Integer.to_string(hop_count) <> " hops ")
+    #IO.puts("reached " <> dest_node <> " in " <> Integer.to_string(hop_count) <> " hops ")
     #send(:global.whereis_name(:mainproc), {:globalMaxHops, hop_count})
     GenServer.cast(:global_counter, {:dec_counter,hop_count})
     {:noreply, {current_node_id, routing_table}}

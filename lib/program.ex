@@ -25,10 +25,10 @@ defmodule Tapestry.Program do
   end
 
   def join_node(node_ids, joining_node)do
-    IO.inspect(joining_node)
+    #IO.inspect(joining_node)
     Tapestry.Node.start_link(joining_node, node_ids)
     for current_node_id <- node_ids ,do:
-    GenServer.cast(String.to_atom(current_node_id), {:joinNode, joining_node})
+    GenServer.cast(GenServer.whereis(String.to_atom(current_node_id)), {:joinNode, joining_node})
 
   end
 

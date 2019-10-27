@@ -13,13 +13,13 @@ defmodule Joiner do
      val=table[row_no][column_no]
 
      #update the value
-     IO.inspect("Your old val:"<>val)
+   #  IO.inspect("Your old val:"<>val)
      if val==nil do
-      IO.inspect("replace with: "<>new_node)
+    #   IO.inspect("replace with: "<>new_node)
       Tapestry.RoutingTable.update_table(table, row_no, column_no, new_node)
      else
       replacement=Tapestry.RoutingTable.get_closest_node(current_node_id, [val,new_node])
-      IO.inspect("replace with:"<>replacement)
+    #   IO.inspect("replace with:"<>replacement)
       Tapestry.RoutingTable.update_table(table, row_no, column_no, replacement)
      end
 
