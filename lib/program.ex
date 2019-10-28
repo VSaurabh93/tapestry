@@ -1,6 +1,6 @@
 defmodule Tapestry.Program do
 
-  def start(num_nodes, num_requests) do
+  def start(num_nodes, num_requests, num_failure) do
     node_ids = Tapestry.Utils.generate_node_guids(num_nodes)
 
     [first_node | remaining_nodes] = node_ids
@@ -11,7 +11,17 @@ defmodule Tapestry.Program do
     #hops_task = Task.async(fn -> update_global_max_hops(0, 0, num_nodes*num_requests ) end)
     #:global.register_name(:mainproc, hops_task.pid)
     #start_time = System.system_time(:millisecond)
-    get_max_hops(num_requests, node_ids)
+
+    if num_failure !=0 do
+      failnodes(num_failure,node_ids,num_requests)
+      get_max_hops(num_requests, node_ids)
+
+    else
+      get_max_hops(num_requests, node_ids)
+    end
+
+
+    # get_max_hops(num_requests, node_ids)
     #Task.await(hops_task, :infinity)
     #time_diff = System.system_time(:millisecond) - start_time
     #IO.puts("Time taken for hops: #{time_diff} milliseconds")
@@ -21,6 +31,35 @@ defmodule Tapestry.Program do
   def create_nodes(node_ids) do
     for current_node_id <- node_ids ,do:
       Tapestry.Node.start_link(current_node_id, node_ids)
+
+  end
+
+  # def killsomerandom(node_count, kill_nodes_no) do
+  #   list = 1..node_count
+
+  #   Enum.each(1..kill_nodes_no, fn _x ->
+  #     random_number = Enum.random(list)
+  #     random_worker_name = "worker_node_" <> to_string(random_number)
+  #     IO.puts("Killed Node: #{random_number}")
+
+  #     if GenServer.whereis(String.to_atom(random_worker_name)) != nil do
+  #       Process.exit(GenServer.whereis(String.to_atom(random_worker_name)), :kill)
+  #     end
+  #   end)
+  # end
+
+  def failnodes(num_failure,node_ids,num_request) do
+    counter_no=0
+    Enum.each(1..num_failure,fn _x ->
+      random_node=GenServer.whereis(String.to_atom(Enum.random(node_ids)))
+      if random_node != nil do
+        Process.exit(random_node,:kill)
+        GenServer.cast(:global_counter,:kill_count)
+      end
+    end)
+    counter_no=GenServer.call(:global_counter,:get_killednodes)
+    IO.inspect(counter_no)
+    GenServer.cast(:global_counter,{:dec_by,counter_no*num_request*2})
 
   end
 
