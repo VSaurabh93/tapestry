@@ -1,21 +1,17 @@
 # Tapestry
 
-**TODO: Add description**
+Sample input:
+mix run tapestry.exs 1000 5
 
-## Installation
+Team Members:
+Saurabh Verma (6087-4081)
+Adil Shaik (6998-5592)
 
-If [available in Hex](https://hex.pm/docs/publish), the package can be installed
-by adding `tapestry` to your list of dependencies in `mix.exs`:
+What is working?
+We have implemented routing table level 0 to 7 with base 16 GUIDS. 
+We have also implemented the max hops it takes to complete the request.
+Also completed the overall max hops count. 
+Joined new node to the network.
 
-```elixir
-def deps do
-  [
-    {:tapestry, "~> 0.1.0"}
-  ]
-end
-```
-
-Documentation can be generated with [ExDoc](https://github.com/elixir-lang/ex_doc)
-and published on [HexDocs](https://hexdocs.pm). Once published, the docs can
-be found at [https://hexdocs.pm/tapestry](https://hexdocs.pm/tapestry).
-
+What is the largest network managed to deal with?
+5000 nodes.
